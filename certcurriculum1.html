@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Certification Study Curriculum</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --accent1: #f5a623;
+    --accent2: #4fc3f7;
+    --accent3: #81c784;
+    --text: #e8e8e8;
+    --muted: #888;
+    --danger: #ef5350;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent1);
+    padding: 28px 40px 22px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem;
+    letter-spacing: 3px;
+    color: var(--accent1);
+    line-height: 1;
+  }
+  header p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 4px;
+  }
+  .overall-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .overall-progress span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .progress-bar-outer {
+    width: 220px;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  .pct-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--accent1);
+    letter-spacing: 1px;
+  }
+
+  /* TAB NAV */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    padding: 0 40px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    padding: 14px 28px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    top: 1px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); border-bottom-color: var(--accent1); }
+  .tab-btn.cert1.active { border-bottom-color: var(--accent2); color: var(--accent2); }
+  .tab-btn.cert2.active { border-bottom-color: var(--accent3); color: var(--accent3); }
+  .tab-btn.cert3.active { border-bottom-color: var(--accent1); color: var(--accent1); }
+
+  /* CONTENT */
+  .content { padding: 32px 40px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* CERT OVERVIEW CARD */
+  .cert-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 32px;
+  }
+  .cert-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    line-height: 1.1;
+  }
+  .cert-title.c1 { color: var(--accent2); }
+  .cert-title.c2 { color: var(--accent3); }
+  .cert-title.c3 { color: var(--accent1); }
+  .cert-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .badge.weeks { background: #1a2a3a; color: var(--accent2); border: 1px solid var(--accent2)33; }
+  .badge.cost { background: #1a2a1a; color: var(--accent3); border: 1px solid var(--accent3)33; }
+  .badge.hrs { background: #2a2a1a; color: var(--accent1); border: 1px solid var(--accent1)33; }
+
+  .cert-stats-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    min-width: 200px;
+    text-align: right;
+  }
+  .cert-stats-box .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    line-height: 1;
+    color: var(--accent1);
+  }
+  .cert-stats-box .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* PHASE / WEEK BLOCKS */
+  .phase {
+    margin-bottom: 28px;
+  }
+  .phase-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .week-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .week-card:hover { transform: translateY(-2px); border-color: #3a3a3a; }
+  .week-card.done { border-color: var(--accent3)55; background: #111a11; }
+  .week-card.done::after {
+    content: '✓';
+    position: absolute;
+    top: 10px; right: 12px;
+    font-size: 1rem;
+    color: var(--accent3);
+    font-weight: bold;
+  }
+  .week-card.active-week { border-color: var(--accent1)88; }
+  .week-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .week-topic {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .week-tasks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .week-tasks li {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.4;
+  }
+  .week-tasks li::before {
+    content: '→';
+    color: var(--accent1);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    margin-top: 1px;
+  }
+  .week-hrs {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* RESOURCES SECTION */
+  .resources-section {
+    margin-top: 36px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .resource-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .resource-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .resource-type.free { color: var(--accent3); }
+  .resource-type.paid { color: var(--accent1); }
+  .resource-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .resource-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* TIMELINE TAB */
+  .timeline-wrap { max-width: 700px; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 0;
+    position: relative;
+  }
+  .tl-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 49px;
+    top: 36px;
+    bottom: -10px;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 6px;
+    gap: 6px;
+  }
+  .tl-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--bg);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .tl-dot.c1 { border-color: var(--accent2); }
+  .tl-dot.c2 { border-color: var(--accent3); }
+  .tl-dot.c3 { border-color: var(--accent1); }
+  .tl-dot.exam { width: 18px; height: 18px; }
+  .tl-dot.c1.exam { background: var(--accent2); }
+  .tl-dot.c2.exam { background: var(--accent3); }
+  .tl-dot.c3.exam { background: var(--accent1); }
+  .tl-week-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  .tl-right {
+    padding: 0 0 24px 20px;
+  }
+  .tl-right h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+  .tl-right p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* TIPS BOX */
+  .tips-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent1);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+  .tips-box h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent1);
+    margin-bottom: 10px;
+  }
+  .tips-box ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .tips-box li {
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .tips-box li::before { content: '⚡'; font-size: 0.75rem; }
+
+  @media (max-width: 600px) {
+    header, .content { padding: 20px; }
+    .tab-nav { padding: 0 20px; }
+    .cert-header { grid-template-columns: 1fr; }
+    .cert-stats-box { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Cert Study Curriculum</h1>
+    <p>NETWORK+ · CWEA EIT · IGNITION CORE — Sequential track @ 5–10 hrs/wk</p>
+  </div>
+  <div class="overall-progress">
+    <span>OVERALL PROGRESS</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="overallBar" style="width:0%"></div>
+      </div>
+      <span class="pct-label" id="overallPct">0%</span>
+    </div>
+    <span id="overallCount">0 / 0 weeks complete</span>
+  </div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn cert1 active" onclick="showTab('cert1')">① Network+</button>
+  <button class="tab-btn cert2" onclick="showTab('cert2')">② CWEA EIT</button>
+  <button class="tab-btn cert3" onclick="showTab('cert3')">③ Ignition Core</button>
+  <button class="tab-btn" onclick="showTab('timeline')">Timeline</button>
+</nav>
+
+<div class="content">
+
+  <!-- ===== CERT 1: NETWORK+ ===== -->
+  <div class="tab-panel active" id="panel-cert1">
+    <div class="cert-header">
+      <div>
+        <div class="cert-title c1">CompTIA Network+</div>
+        <div class="cert-meta">
+          <span class="badge weeks">8–10 Weeks</span>
+          <span class="badge hrs">~80 hrs total</span>
+          <span class="badge cost">$369 exam</span>
+        </div>
+      </div>
+      <div class="cert-stats-box">
+        <div class="stat-num" id="c1-pct">0%</div>
+        <div class="stat-label">complete</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace;" id="c1-count">0/8 weeks</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 1 — Foundations (Weeks 1–3)</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 1</div>
+          <div class="week-topic">Networking Fundamentals & OSI Model</div>
+          <ul class="week-tasks">
+            <li>OSI & TCP/IP model layers — memorize functions of each</li>
+            <li>IP addressing, subnetting basics, IPv4 vs IPv6</li>
+            <li>Professor Messer: Section 1 videos (free)</li>
+            <li>Practice 20 subnetting questions</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 2</div>
+          <div class="week-topic">Network Topologies & Cabling</div>
+          <ul class="week-tasks">
+            <li>Network types: LAN, WAN, MAN, PAN, WLAN</li>
+            <li>Cable types: Cat5e/6/6a, fiber (single vs multi-mode), coax</li>
+            <li>Connectors and tools: punchdown, crimpers, tone generators</li>
+            <li>Professor Messer Section 2 + flashcard review</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 3</div>
+          <div class="week-topic">Switching & VLANs</div>
+          <ul class="week-tasks">
+            <li>Ethernet switching, MAC tables, STP/RSTP</li>
+            <li>VLANs, trunking, inter-VLAN routing</li>
+            <li>PoE, port mirroring, 802.1Q</li>
+            <li>Messer Section 2 cont. + Dion Training quiz set</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 2 — Core Protocols & Routing (Weeks 4–6)</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 4</div>
+          <div class="week-topic">Routing & WAN Technologies</div>
+          <ul class="week-tasks">
+            <li>Static vs dynamic routing, RIP, OSPF, BGP basics</li>
+            <li>NAT/PAT, CIDR, route summarization</li>
+            <li>WAN links: MPLS, SD-WAN, fiber, DSL, cable</li>
+            <li>Packet Tracer lab: configure basic routing</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 5</div>
+          <div class="week-topic">Wireless Networking</div>
+          <ul class="week-tasks">
+            <li>802.11 standards: a/b/g/n/ac/ax — speeds and frequencies</li>
+            <li>SSID, channels, interference, antenna types</li>
+            <li>WPA2/WPA3, TKIP, CCMP/AES</li>
+            <li>Wireless site survey concepts</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 6</div>
+          <div class="week-topic">Network Services: DNS, DHCP, NTP, SNMP</div>
+          <ul class="week-tasks">
+            <li>DNS record types: A, AAAA, MX, CNAME, PTR, TXT</li>
+            <li>DHCP process (DORA), scopes, reservations</li>
+            <li>SNMP versions, MIBs, OIDs</li>
+            <li>NTP hierarchy and stratum levels</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 3 — Security, Troubleshooting & Exam Prep (Weeks 7–8)</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 7</div>
+          <div class="week-topic">Network Security & Threats</div>
+          <ul class="week-tasks">
+            <li>Firewalls, ACLs, IDS vs IPS, DMZ, honeypots</li>
+            <li>Common attacks: DDoS, MITM, VLAN hopping, ARP poisoning</li>
+            <li>VPN types: IPSec, SSL/TLS, split tunnel</li>
+            <li>Zero trust model, network hardening basics</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c1">
+          <div class="week-num">WEEK 8</div>
+          <div class="week-topic">Full Review + Practice Exams</div>
+          <ul class="week-tasks">
+            <li>2× full-length Dion Training or Messer practice exams</li>
+            <li>Review all flagged/missed questions — no rote, understand WHY</li>
+            <li>Troubleshooting methodology: OSI bottom-up approach</li>
+            <li>Schedule and sit the N10-009 exam</li>
+          </ul>
+          <div class="week-hrs">⏱ 8–10 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources-section">
+      <div class="section-title">Resources</div>
+      <div class="resource-grid">
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">Professor Messer N10-009</div>
+          <div class="resource-desc">professormesser.com — complete video course, study groups, and notes. Best free resource available.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">Cisco Packet Tracer</div>
+          <div class="resource-desc">Free network simulator from Cisco Networking Academy. Essential for hands-on routing/switching labs.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type paid">PAID (work expense)</div>
+          <div class="resource-name">Jason Dion Practice Exams</div>
+          <div class="resource-desc">Udemy — 6 full practice exams. ~$15–30. Most accurate exam simulation available.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type paid">PAID (work expense)</div>
+          <div class="resource-name">Mike Meyers' Network+ Guide</div>
+          <div class="resource-desc">Book — comprehensive reference with excellent troubleshooting chapters. McGraw-Hill.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-box">
+      <h4>Study Tips for Network+</h4>
+      <ul>
+        <li>Subnetting is guaranteed on the exam — drill it until it's automatic. Use SubnettingPractice.com daily.</li>
+        <li>Don't just watch Messer — pause and take notes. Active recall beats passive watching.</li>
+        <li>On practice exams, score 85%+ consistently before booking the real thing.</li>
+        <li>Performance-based questions (drag-and-drop, simulations) are ~15% of the exam. Practice in Packet Tracer.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== CERT 2: CWEA EIT ===== -->
+  <div class="tab-panel" id="panel-cert2">
+    <div class="cert-header">
+      <div>
+        <div class="cert-title c2">CWEA EIT — Grade 1</div>
+        <div class="cert-meta">
+          <span class="badge weeks">8 Weeks</span>
+          <span class="badge hrs">~65 hrs total</span>
+          <span class="badge cost">Apply by May 31 · cert.cwea.org</span>
+        </div>
+      </div>
+      <div class="cert-stats-box">
+        <div class="stat-num" id="c2-pct">0%</div>
+        <div class="stat-label">complete</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace;" id="c2-count">0/8 weeks</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin-bottom:28px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Grade 1 Exam Domain Weights — Study Accordingly</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:160px;font-size:0.75rem;color:var(--text);">Safety &amp; Tools</div><div style="flex:1;background:var(--border);border-radius:3px;height:10px;overflow:hidden;"><div style="width:28%;height:100%;background:#ef5350;border-radius:3px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:#ef5350;width:36px;">28%</div></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:160px;font-size:0.75rem;color:var(--text);">Maintenance &amp; Repair</div><div style="flex:1;background:var(--border);border-radius:3px;height:10px;overflow:hidden;"><div style="width:24%;height:100%;background:var(--accent2);border-radius:3px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent2);width:36px;">24%</div></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:160px;font-size:0.75rem;color:var(--text);">Installation &amp; Config</div><div style="flex:1;background:var(--border);border-radius:3px;height:10px;overflow:hidden;"><div style="width:19%;height:100%;background:var(--accent3);border-radius:3px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent3);width:36px;">19%</div></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:160px;font-size:0.75rem;color:var(--text);">Documentation &amp; Principles</div><div style="flex:1;background:var(--border);border-radius:3px;height:10px;overflow:hidden;"><div style="width:18%;height:100%;background:var(--accent1);border-radius:3px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent1);width:36px;">18%</div></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="width:160px;font-size:0.75rem;color:var(--text);">Math</div><div style="flex:1;background:var(--border);border-radius:3px;height:10px;overflow:hidden;"><div style="width:11%;height:100%;background:var(--muted);border-radius:3px;"></div></div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--muted);width:36px;">11%</div></div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 1 — Safety First (Weeks 1–2) · 28% of exam</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 1</div>
+          <div class="week-topic">Electrical Safety &amp; OSHA</div>
+          <ul class="week-tasks">
+            <li>Lockout/Tagout (LOTO) — OSHA 29 CFR 1910.147 procedures and steps</li>
+            <li>Arc Flash boundaries, PPE categories, NFPA 70E basics</li>
+            <li>Confined space entry — CalOSHA Title 8 Section 5157</li>
+            <li>PPE selection for electrical, mechanical, and chemical hazards</li>
+            <li>Recognizing and reporting unsafe conditions</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 2</div>
+          <div class="week-topic">Codes, SCADA Basics &amp; Tools</div>
+          <ul class="week-tasks">
+            <li>NEC basics for industrial/commercial — NFPA 70 and NFPA 820</li>
+            <li>Basic SCADA: PLCs, RTUs, radios, HMIs, alarm servers</li>
+            <li>DMM categories and correct usage for voltage, amperage, resistance</li>
+            <li>Testing 4-20mA loops, cable/wire toners</li>
+            <li>CMMS documentation basics — service records and daily logs</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 2 — Maintenance, Repair &amp; Installation (Weeks 3–5) · 43% of exam</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 3</div>
+          <div class="week-topic">Electrical Systems &amp; Schematics</div>
+          <ul class="week-tasks">
+            <li>Reading electrical schematics, single-line diagrams, loop diagrams, P&amp;IDs</li>
+            <li>Motor Control Centers (MCCs) — components and layout</li>
+            <li>VFDs and soft starters — basic operation and fault identification</li>
+            <li>Low voltage troubleshooting in water/wastewater facilities</li>
+            <li>Fiber optic fundamentals — understand the basics</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 4</div>
+          <div class="week-topic">Equipment, Motors &amp; Pumps</div>
+          <ul class="week-tasks">
+            <li>Motor types, nameplate data, overload protection ratings</li>
+            <li>Maintaining and replacing: communication hubs, switches, controllers</li>
+            <li>Identifying defects in instrumentation and electronic control equipment</li>
+            <li>Assess health and functionality of pumps and blowers</li>
+            <li>Conduit bending and installation basics</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 5</div>
+          <div class="week-topic">Installation &amp; Configuration</div>
+          <ul class="week-tasks">
+            <li>P&amp;ID reading — process and instrumentation diagrams</li>
+            <li>VFD, level sensor, pressure/flow transmitter configuration basics</li>
+            <li>Conduit, wire, relays, pull boxes per NEC</li>
+            <li>Pneumatic control valve basics and control scheme overview</li>
+            <li>UPS, battery chargers, solar/wind generation overview</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 3 — Documentation, Principles &amp; Math (Weeks 6–7) · 29% of exam</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 6</div>
+          <div class="week-topic">Foundational Principles &amp; Documentation</div>
+          <ul class="week-tasks">
+            <li>Ohm's Law, basic power and energy — P=VI, E=IR, memorize the triangle</li>
+            <li>Electronic components: diodes, transistors, resistors, capacitors, inductors</li>
+            <li>Ladder logic and function block programs — basic reading only</li>
+            <li>Blueprints, wire diagrams, schematics — basic interpretation</li>
+            <li>Maintaining service records, daily logs, CMMS entries</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 7</div>
+          <div class="week-topic">Math Drills — Formula Sheet Provided on Exam!</div>
+          <ul class="week-tasks">
+            <li>Volume: rectangular (L×W×H×7.48 gal/ft³) and cylindrical tanks (0.785×D²×H)</li>
+            <li>Pressure/head: 1 psi = 2.31 ft of water · 1 psi = 27.7 in w.c.</li>
+            <li>Power: P=VI · solve for current (I=E/R) then power (P=V×I)</li>
+            <li>Work through ALL Grade 1 sample math problems from the handbook</li>
+            <li>Motor overload ratings, flow, velocity, rate/ratio/percent</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 4 — Full Review &amp; Exam (Week 8)</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c2">
+          <div class="week-num">WEEK 8</div>
+          <div class="week-topic">Gap Analysis Review &amp; Exam Day</div>
+          <ul class="week-tasks">
+            <li>Complete the CWEA Grade 1 Gap Analysis Tool — target any remaining weak spots</li>
+            <li>Re-read all Grade 1 sample questions and answer keys from the handbook</li>
+            <li>Review the EIT Formula Sheet until all conversions feel natural</li>
+            <li>Confirm Pearson VUE exam appointment and test center location</li>
+            <li>Bring government-issued photo ID and approved calculator on exam day</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources-section">
+      <div class="section-title">Resources — Grade 1 Specific</div>
+      <div class="resource-grid">
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">CWEA Gap Analysis Tool</div>
+          <div class="resource-desc">cert.cwea.org EIT page — self-rating worksheet mapped to Grade 1 domains. Complete this in Week 1 to find your weak spots immediately.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">OSHA LOTO — 29 CFR 1910.147</div>
+          <div class="resource-desc">osha.gov — free PDF, directly cited in the handbook. LOTO is heavily tested. Read it fully.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">CalOSHA Confined Space Guide (2019)</div>
+          <div class="resource-desc">dir.ca.gov — free PDF, directly cited in the handbook for the safety domain. Essential for the 28% safety section.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">OWEN — CWEA Online Training</div>
+          <div class="resource-desc">owen.mycwea.org — CWEA's own cert prep platform. Access once your mycwea.org account is created for the application.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type paid">PAID (work expense)</div>
+          <div class="resource-name">Operation of Wastewater Treatment Plants Vol. 1 &amp; 2</div>
+          <div class="resource-desc">owp.csus.edu — the most frequently cited reference across every Grade 1 domain in the handbook. The single most important purchase.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type paid">PAID (work expense)</div>
+          <div class="resource-name">Electrical Motor Controls for Integrated Systems, 5th Ed.</div>
+          <div class="resource-desc">Rockis &amp; Mazur — directly cited for the Maintenance domain. Covers motor control circuits, VFDs, and basic ladder logic.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-box">
+      <h4>Grade 1 Exam Tips — Straight from the Handbook</h4>
+      <ul>
+        <li>Safety is 28% of the exam — the single heaviest domain. LOTO, arc flash, confined space, and PPE should dominate Weeks 1–2.</li>
+        <li>The EIT Formula Sheet is on screen during the exam. You don't memorize conversions — you just need to use them quickly under time pressure.</li>
+        <li>100 multiple-choice questions, 3 hours. That's 1.8 min/question — very manageable if you're prepared.</li>
+        <li>No experience required for Grade 1 — your application should be approved faster than higher grades. Submit by May 31st for the Summer window.</li>
+        <li>Approved calculators: TI-30x, TI-36x, Casio FX-115, or Sharp EL series (not EL-W516B or EL-W535B).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== CERT 3: IGNITION ===== -->
+  <div class="tab-panel" id="panel-cert3">
+    <div class="cert-header">
+      <div>
+        <div class="cert-title c3">Ignition Core Certification</div>
+        <div class="cert-meta">
+          <span class="badge weeks">6–8 Weeks</span>
+          <span class="badge hrs">~50 hrs total</span>
+          <span class="badge cost">$350 exam · Free prep on IU</span>
+        </div>
+      </div>
+      <div class="cert-stats-box">
+        <div class="stat-num" id="c3-pct">0%</div>
+        <div class="stat-label">complete</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace;" id="c3-count">0/6 weeks</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 1 — Architecture & Designer Basics (Weeks 1–2)</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c3">
+          <div class="week-num">WEEK 1</div>
+          <div class="week-topic">Ignition Architecture & Gateway</div>
+          <ul class="week-tasks">
+            <li>Download Ignition trial (free, fully functional)</li>
+            <li>IU courses: Ignition Gateway Overview, Architecture</li>
+            <li>Gateway Web Interface: modules, connections, status</li>
+            <li>OPC-UA basics, device connections, tag browse</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c3">
+          <div class="week-num">WEEK 2</div>
+          <div class="week-topic">Designer Interface & Components</div>
+          <ul class="week-tasks">
+            <li>IU: Ignition Designer Basics course</li>
+            <li>Windows, views, templates — navigation and hierarchy</li>
+            <li>Component properties, bindings, and expressions</li>
+            <li>Build a basic HMI screen from scratch as practice</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 2 — Tags, Data & History (Weeks 3–4)</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c3">
+          <div class="week-num">WEEK 3</div>
+          <div class="week-topic">Tag System & UDTs</div>
+          <ul class="week-tasks">
+            <li>Tag types: OPC, memory, expression, query, derived</li>
+            <li>User-Defined Types (UDTs): create a pump UDT with params</li>
+            <li>Tag groups, scan classes, and deadbands</li>
+            <li>IU: Tags in Depth course — complete in full</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c3">
+          <div class="week-num">WEEK 4</div>
+          <div class="week-topic">Historical Logging & Reporting</div>
+          <ul class="week-tasks">
+            <li>Tag history providers, storage configurations</li>
+            <li>Easy Chart and Power Chart components</li>
+            <li>Database connections, transaction groups</li>
+            <li>IU: Historical Data course</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 3 — Alarming, Scripting & Exam Prep (Weeks 5–6)</div>
+      <div class="week-grid">
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c3">
+          <div class="week-num">WEEK 5</div>
+          <div class="week-topic">Alarming & Scripting</div>
+          <ul class="week-tasks">
+            <li>Alarm modes, pipelines, shelving, acknowledgment</li>
+            <li>Alarm journal and alarm status table</li>
+            <li>Python scripting basics in Ignition (Jython)</li>
+            <li>Gateway/client event scripts, component scripts</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–8 hrs</div>
+        </div>
+        <div class="week-card" onclick="toggleWeek(this)" data-cert="c3">
+          <div class="week-num">WEEK 6</div>
+          <div class="week-topic">Full Review & Certification Exam</div>
+          <ul class="week-tasks">
+            <li>Complete all remaining Inductive University Core courses</li>
+            <li>Review Ignition User Manual sections for weak areas</li>
+            <li>Purchase and schedule the $350 Core exam</li>
+            <li>Rebuild a full mini-project: gateway → tags → HMI → alarms → history</li>
+          </ul>
+          <div class="week-hrs">⏱ 7–9 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources-section">
+      <div class="section-title">Resources</div>
+      <div class="resource-grid">
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">Inductive University</div>
+          <div class="resource-desc">inductiveuniversity.com — 100% free, the official training platform. Complete the Core track.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">Ignition Free Trial</div>
+          <div class="resource-desc">inductiveautomation.com/downloads — fully functional 2-hour reset trial. Use this for all hands-on practice.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">Ignition User Manual</div>
+          <div class="resource-desc">docs.inductiveautomation.com — comprehensive online documentation. Bookmark and use constantly.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-type free">FREE</div>
+          <div class="resource-name">Inductive Automation Forum</div>
+          <div class="resource-desc">forum.inductiveautomation.com — active community. Search for exam prep threads and common questions.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-box">
+      <h4>Study Tips for Ignition Core</h4>
+      <ul>
+        <li>Hands-on practice is everything. Don't just watch IU videos — build alongside them in the free trial.</li>
+        <li>The exam is one attempt per purchase. Be consistent scoring 85%+ on IU quizzes before buying the exam.</li>
+        <li>Focus heavily on UDTs — they appear throughout the exam and are central to real-world Ignition work.</li>
+        <li>The Ignition forum has exam prep threads from past candidates. Search "Core certification tips."</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== TIMELINE TAB ===== -->
+  <div class="tab-panel" id="panel-timeline">
+    <div style="margin-bottom:28px;">
+      <div class="cert-title" style="color:var(--accent1);font-size:1.6rem;margin-bottom:6px;">Full Certification Roadmap</div>
+      <p style="font-size:0.85rem;color:var(--muted);">Sequential order optimized for ASAP completion at 5–10 hrs/week. ~26 weeks total.</p>
+    </div>
+    <div class="timeline-wrap">
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c1"></div>
+          <div class="tl-week-label">Wk 1–3</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent2);">Network+ — Phase 1</h3>
+          <p>OSI model, IP/subnetting, topologies, cabling, switching & VLANs. Build your networking foundation.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c1"></div>
+          <div class="tl-week-label">Wk 4–6</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent2);">Network+ — Phase 2</h3>
+          <p>Routing, WAN, wireless 802.11, DNS/DHCP/NTP. Start Packet Tracer labs alongside readings.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c1"></div>
+          <div class="tl-week-label">Wk 7–8</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent2);">Network+ — Security & Final Prep</h3>
+          <p>Network security, full practice exams. Target 85%+ on Dion practice tests before booking.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c1 exam"></div>
+          <div class="tl-week-label" style="color:var(--accent2);">~Wk 9</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent2);">🎯 SIT NETWORK+ EXAM (N10-009)</h3>
+          <p>Book at Pearson VUE. $369 covered by employer.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c2"></div>
+          <div class="tl-week-label">Wk 9–11</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent3);">CWEA EIT — Phase 1</h3>
+          <p>Electrical theory, safety (NFPA 70E), motors, VFDs, power distribution. Submit CWEA application immediately — approval takes weeks.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c2"></div>
+          <div class="tl-week-label">Wk 12–14</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent3);">CWEA EIT — Phase 2</h3>
+          <p>Sensors, 4-20mA loops, PLCs, ladder logic, SCADA, PID control, P&IDs, calibration.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c2"></div>
+          <div class="tl-week-label">Wk 15–16</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent3);">CWEA EIT — Phase 3 & Final Review</h3>
+          <p>Water/wastewater-specific instrumentation, telemetry, pump controls, troubleshooting scenarios.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c2 exam"></div>
+          <div class="tl-week-label" style="color:var(--accent3);">~Wk 17</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent3);">🎯 SIT CWEA EIT EXAM</h3>
+          <p>Schedule through cert.cwea.org once approved. Contact CWEA at (510) 382-7800.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c3"></div>
+          <div class="tl-week-label">Wk 17–18</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent1);">Ignition Core — Phase 1</h3>
+          <p>Install trial, Gateway/architecture overview, Designer interface, components, bindings, expressions. Build first practice HMI.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c3"></div>
+          <div class="tl-week-label">Wk 19–20</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent1);">Ignition Core — Phase 2</h3>
+          <p>Tag system, UDTs, historical logging, database connections, Easy Chart & Power Chart.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c3"></div>
+          <div class="tl-week-label">Wk 21–22</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent1);">Ignition Core — Phase 3 & Final Project</h3>
+          <p>Alarming pipelines, Python scripting, full mini-project rebuild, complete all IU Core courses.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-dot c3 exam"></div>
+          <div class="tl-week-label" style="color:var(--accent1);">~Wk 23</div>
+        </div>
+        <div class="tl-right">
+          <h3 style="color:var(--accent1);">🎯 SIT IGNITION CORE EXAM</h3>
+          <p>Purchase $350 exam at inductiveautomation.com. One attempt — only buy when consistently scoring 85%+ on IU quizzes.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tips-box" style="margin-top:36px; max-width:700px;">
+      <h4>Why This Order?</h4>
+      <ul>
+        <li>Network+ first — most structured, heavy study guide support, good warm-up for a study routine.</li>
+        <li>CWEA EIT second — application approval takes weeks, so submit the application during Network+ Phase 3. Study material overlaps with your day job.</li>
+        <li>Ignition Core last — most hands-on, benefits from the PLC/SCADA knowledge you'll have built in CWEA prep. The free trial is time-limited per session so shorter, focused bursts work best.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const state = {};
+
+  function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function toggleWeek(el) {
+    el.classList.toggle('done');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const certs = {
+      c1: { total: 8, pctEl: 'c1-pct', countEl: 'c1-count' },
+      c2: { total: 8, pctEl: 'c2-pct', countEl: 'c2-count' },
+      c3: { total: 6, pctEl: 'c3-pct', countEl: 'c3-count' },
+    };
+
+    let totalDone = 0;
+    let totalAll = 0;
+
+    for (const [cert, info] of Object.entries(certs)) {
+      const cards = document.querySelectorAll(`[data-cert="${cert}"]`);
+      const done = [...cards].filter(c => c.classList.contains('done')).length;
+      const pct = Math.round((done / info.total) * 100);
+      document.getElementById(info.pctEl).textContent = pct + '%';
+      document.getElementById(info.countEl).textContent = `${done}/${info.total} weeks`;
+      totalDone += done;
+      totalAll += info.total;
+    }
+
+    const overallPct = Math.round((totalDone / totalAll) * 100);
+    document.getElementById('overallPct').textContent = overallPct + '%';
+    document.getElementById('overallBar').style.width = overallPct + '%';
+    document.getElementById('overallCount').textContent = `${totalDone} / ${totalAll} weeks complete`;
+  }
+
+  updateProgress();
+</script>
+</body>
+</html>
